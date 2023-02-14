@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ai generated art - Gilad Meirson</title>
+
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="./index.js"></script>
+
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://kit.fontawesome.com/d93af1fc51.js" crossorigin="anonymous"></script>
+       
+        <style>
+            *{
+                font-family: monospace;
+            }
+            body{
+               background-color: black;
+            }
+                #header{
+                    text-align: center;
+                    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    padding: 1%;
+                    background-image:url('./network.jpg');
+                    background-position: center; /* Center the image */
+                    background-repeat: no-repeat; /* Do not repeat the image */
+                    background-size: cover; /* Resize the background image to cover the entire container */
+                }
+                #tools{
+                    width: 100%;
+                }
+                #comand{
+                    font-size: 24px;
+                    width: 75vw;
+                    padding: 0.5%;
+                    border-radius: 15px;
+                }
+                #comand:focus{
+                    background-color: beige;;
+                }
+                button{
+                    cursor: pointer;
+                    text-align: center;
+                    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    padding: 0.75%;
+                    background-image: linear-gradient(140deg, #65d2e0 0%, #5b9cd8 50%, #72a1df 75%);
+                    border-radius: 25px;
+                    font-size: 22px;
+
+                }
+                button:hover {
+                    background-image: linear-gradient(140deg, #fff67c 0%, #fffb29 50%, #ffc936 75%);
+                    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+                    position: relative;
+                    top: -8px;
+}
+                #imgcon{
+                    border:2px solid gold
+                }
+                #Wraper {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                }
+                #ImgPH{
+                    display: none;
+                }
+                #Load {
+                text-align: center;
+                margin-top: 20%;
+                display: none;
+                }
+                #time{
+                    color: darkgreen;
+                    font-size: 19px;
+                    font-weight: 900;
+                }
+                #container{
+                    display: none;
+                }
+                #Valid{
+                    background-color: black;
+                    font-size: 38px;
+                    text-align: center;
+                    padding: 1%;
+                    color: green;
+                }
+                .btn{
+                    padding: 3%;
+                }
+                #ImgPH div img {
+                    width: 500px;
+                }
+                #header2 a{
+                    font-size: 16px;
+                    color: #8fe3ff;
+                    margin-left: 15px;
+                }
+                #header2 a:hover{
+                    font-size: 18px;
+                    color: #eff178;
+                   
+                }
+                i{
+                    color: white;
+                    font-size: 22px;
+                    margin-left: 15px;
+                    margin-top: 1%;
+                    cursor: pointer;
+
+                }
+                i:hover{
+                    color: rgb(247, 219, 61);
+                    font-size: 26px;
+                }
+                #canWrraper{
+                    height: 75vh;
+                    display: none;
+                    text-align: center;
+                }
+              
+            </style>
+    </head>
+    <body onload="init()">
+        <div id="container">
+
+            <div id="header">
+                <h1 style="color:rgb(246, 250, 13); font-size: 38px;">AI Create
+                    Art by Gilad Meirson</h1>
+                <div id="tools">
+                    <input placeholder="Amazing sunset in space..."
+                        maxlength="125"
+                        type="text" name="comand" id="comand">
+                    <button onclick="GetServerRespon()">Generate Image </button>
+                </div>
+            </div>
+            <div id="header2">
+                <i onclick="ref()" class="fa-solid fa-clock-rotate-left"></i>
+                <i class="fa-solid fa-circle-info"></i>
+          
+            </div>
+            <div id="Load">
+                <img src="./loading-gif.gif" alt="loading..">
+            </div>
+            <div id="canWrraper">
+                <canvas id="can"></canvas>
+            </div>
+
+            <div id="ImgPH">
+                <div id="Wraper">
+                    <div><h3 style="font-size: 24px; color: wheat;">Your Image</h3><span><button
+                                onclick="DownloadIMG()" class="btn">Download Img</button></span>
+                        <p id="time">Procces time : </p>
+                    </div>
+                    <div id="imgcon"><img id="thePH" src="" alt=""></div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div id="Valid">
+            <h1 id="headlineValid">Sorry but we have to</h1>
+            <p>PASSWORD : </p>
+            <input one style=" font-size: 38px;
+                background: #000200;
+                border: 1px green solid; color: green;" type="password"
+                name="pass"
+                id="passs">
+        </div>
+
+     
+
+    </body>
+</html>
